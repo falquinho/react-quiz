@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Navbar, NavbarBrand } from 'reactstrap'
+import { Navbar, NavbarBrand, Nav } from 'reactstrap'
 import { QuizzThumb } from '../components/QuizzThumb'
 
 
@@ -23,8 +23,9 @@ export class CollectionPage extends Component {
 
         return (
             <div>
-                <Navbar>
-                    <NavbarBrand>Quizz Collection</NavbarBrand>
+                <Navbar color='light' ligth expand='md'>
+                    <NavbarBrand href='/'>Quizz Collection</NavbarBrand>
+                    <Nav className='ml-auto' navbar></Nav>
                 </Navbar>
             </div>
         );
