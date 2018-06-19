@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
-import { Navbar, NavbarBrand, Nav } from 'reactstrap'
-import { QuizzThumb } from '../components/QuizzThumb'
+import { 
+    Navbar, 
+    NavbarBrand, 
+    Nav,
+    Container,
+    Row,
+    Col } from 'reactstrap';
+import { QuizzThumb } from '../components/QuizzThumb';
+import { FloatingButton } from '../components/FloatingButton';
 
 
 
@@ -10,7 +17,7 @@ export class CollectionPage extends Component {
         super(props);
 
         this.state = {
-            quizz_list: [],
+            quizz_list: [{}, {}, {}, {}, {}, {}, {}]
         }
     }
 
@@ -18,16 +25,29 @@ export class CollectionPage extends Component {
 
     render() {
         const thumb_list = this.state.quizz_list.map(e => {
-            return (<li><QuizzThumb/></li>)
+            return (<Col md='6' xl='4' style={{marginBottom: 30}}><QuizzThumb/></Col>)
         });
 
         return (
-            <div>
-                <Navbar color='light' ligth expand='md'>
-                    <NavbarBrand href='/'>Quizz Collection</NavbarBrand>
-                    <Nav className='ml-auto' navbar></Nav>
-                </Navbar>
-            </div>
+            <Container fluid>
+                <Row>
+                    <Col>
+                        <Navbar color='dark' dark expand='md' style={{marginLeft: -15, marginRight: -15}}>
+                            <NavbarBrand style={{color: 'gainsboro'}}>Quizz Collection</NavbarBrand>
+                            <Nav className='ml-auto' navbar></Nav>
+                        </Navbar>
+                    </Col>
+                </Row>
+                <Row style={{marginTop: 30, paddingBottom: 64}}>
+                    <Col md={{size: 10, offset: 1}} xl={{size: 8, offset: 2}}>
+                        <Row>
+                            { thumb_list }
+                        </Row>
+                    </Col>
+                </Row>
+
+                <FloatingButton/>
+            </Container>
         );
     }
 }
