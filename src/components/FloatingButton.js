@@ -9,7 +9,7 @@ export class FloatingButton extends Component {
     render() {
         return (
             <div className='circle_button bg-primary'>
-                <Link id='new_link' to='/new'>+</Link>
+                {this.props.children}
             </div>
         );
     }

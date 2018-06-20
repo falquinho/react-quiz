@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { 
     Navbar, 
     NavbarBrand, 
@@ -28,6 +29,13 @@ export class CollectionPage extends Component {
             return (<Col md='6' xl='4' style={{marginBottom: 30}}><QuizzThumb/></Col>)
         });
 
+        const link_style = {
+            textAlign: 'center', 
+            lineHeight: 2.6, 
+            textDecoration: 'none', 
+            height: '100%', width: '100%'
+        }
+
         return (
             <Container fluid>
                 <Row>
@@ -46,7 +54,9 @@ export class CollectionPage extends Component {
                     </Col>
                 </Row>
 
-                <FloatingButton/>
+                <FloatingButton>
+                    <Link to='/new' className='material-icons text-white' style={link_style}>add</Link>
+                </FloatingButton>
             </Container>
         );
     }
