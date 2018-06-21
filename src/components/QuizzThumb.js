@@ -11,12 +11,6 @@ import {
 
 export class QuizzThumb extends Component {
 
-    constructor(props){
-        super(props);
-    }
-
-
-
     render() {
         return(
             <Card body style={{boxShadow: '1px 2px 5px gray'}}>

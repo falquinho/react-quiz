@@ -80,33 +80,106 @@ export class NewQuizzPage extends Component {
 
 
     onNewAnswerBtnClicked(event) {
-        console.log('onNewAnswerBtnClicked()');
+        let new_questions = this.state.questions;    
+        new_questions[this.state.curr_index].answers.push('');
+        this.setState({
+            ...this.state,
+            questions: new_questions
+        });
+    }
+
+
+
+    onQuestionTextChanged(event) {
+        console.log('onQuestionTextChanged()')
+        console.log(event.target.value)
 
         let new_questions = this.state.questions;
-        new_questions[this.state.curr_index].answers.push('');
+        new_questions[this.state.curr_index].text = event.target.value;
 
         this.setState({
             ...this.state,
             questions: new_questions
-        })
+        });
+    }
+
+
+
+    onAnswerTextChanged(event, index) {
+        console.log('onAnswerTextChanged()');
+        console.log('index: ', index)
+        console.log('value: ', event.target);
+
+        let new_questions = this.state.questions;
+        new_questions[this.state.curr_index].answers[index] = event.target.value;
+        this.setState({
+            ...this.state,
+            questions: new_questions
+        });
+    }
+
+
+
+    onDeleteAnswerBtnClicked(evt, index) {
+        let new_questions = this.state.questions;
+        new_questions[this.state.curr_index].answers.splice(index, 1);
+
+        this.setState({
+            ...this.state,
+            questions: new_questions
+        });
+    }
+
+
+
+    onRadioBtnChanged(event, index) {
+        let new_questions = this.state.questions;
+        new_questions[this.state.curr_index].correct_index = index;
+
+        this.setState({
+            ...this.state,
+            questions: new_questions
+        });
+    }
+
+
+
+    onDoneBtnClicked(event) {
+        console.log('onDoneBtnClicked()');
     }
 
 
 
     render(){
         const curr_index = this.state.curr_index;
-        const answers_block = this.state.questions[curr_index].answers.map(e => {
+        const curr_question = this.state.questions[curr_index];
+
+        const answers_block = curr_question.answers.map((e, index) => {
             return(
-                <InputGroup className='mt-3'>
-                    <InputGroupAddon addonType="prepend">
-                    <InputGroupText>
-                        <Input addon type="radio" name='radio' aria-label='radio' />
-                    </InputGroupText>
-                    </InputGroupAddon>
-                    <Input placeholder='An answer.' />
-                </InputGroup>
+                <FormGroup tag='fieldset'>
+                    <InputGroup className='mt-3'>
+                        <InputGroupAddon addonType="prepend">
+                        <InputGroupText>
+                            <Input addon type="radio" name='radio' aria-label='radio' 
+                                checked={curr_question.correct_index === index} 
+                                onChange={evt => this.onRadioBtnChanged(evt, index)}>
+                            </Input>
+                        </InputGroupText>
+                        </InputGroupAddon>
+
+                        <Input onChange={evt => this.onAnswerTextChanged(evt, index)} value={curr_question.answers[index]}>
+                        </Input>
+
+                        <InputGroupAddon addonType='append'>
+                            <Button className='material-icons' color='danger' disabled={index <= 3} 
+                                    onClick={evt => this.onDeleteAnswerBtnClicked(evt, index)}>
+                                delete
+                            </Button>
+                        </InputGroupAddon>
+                    </InputGroup>
+                </FormGroup>
             );
-        })
+        });
 
         return(
             <Container fluid>
@@ -167,15 +240,14 @@ export class NewQuizzPage extends Component {
                         <Form className='mt-3'>
                             <FormGroup>
                                 <Label for='question_txt'>Question Text:</Label>
-                                <Input type='textarea' id='question_txt'></Input>
+                                <Input type='textarea' id='question_txt' value={curr_question.text} onChange={e => this.onQuestionTextChanged(e)}></Input>
                             </FormGroup>
                         </Form>
 
                         <h5>Answers</h5>
                         <Form className='mb-3'>
-                            <FormGroup tag='fieldset'>
-                                {answers_block}
-                            </FormGroup>
+
+                            {answers_block}
 
                             <Button block color='primary' onClick={e => this.onNewAnswerBtnClicked(e)}>
                                 New Answer
