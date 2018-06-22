@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { 
     Container,
     Row,
@@ -14,11 +15,12 @@ import {
     InputGroupAddon,
     InputGroupText,
     Button } from 'reactstrap';
+import { ACTION_SAVE_NEW_QUIZ } from '../redux/Actions';
 import { FloatingButton } from '../components/FloatingButton'
 
 
 
-export class NewQuizzPage extends Component {
+class NewQuizzPage extends Component {
 
     constructor(props){
         super(props)
@@ -32,8 +34,36 @@ export class NewQuizzPage extends Component {
                 answers: ['', '', '', ''],
                 correct_index: 0
             }],
-            curr_index: 0
+            curr_index: 0,
+            redirect: false
         }
+    }
+
+
+
+    onTitleChanged(event) {
+        this.setState({
+            ...this.state,
+            quiz_title: event.target.value
+        });
+    }
+
+
+
+    onBriefChanged(event) {
+        this.setState({
+            ...this.state,
+            quiz_brief: event.target.value
+        });
+    }
+
+
+
+    onParagraphChanged(event) {
+        this.setState({
+            ...this.state,
+            quiz_text: event.target.value
+        });
     }
 
 
@@ -91,9 +121,6 @@ export class NewQuizzPage extends Component {
 
 
     onQuestionTextChanged(event) {
-        console.log('onQuestionTextChanged()')
-        console.log(event.target.value)
-
         let new_questions = this.state.questions;
         new_questions[this.state.curr_index].text = event.target.value;
 
@@ -106,10 +133,6 @@ export class NewQuizzPage extends Component {
 
 
     onAnswerTextChanged(event, index) {
-        console.log('onAnswerTextChanged()');
-        console.log('index: ', index)
-        console.log('value: ', event.target);
-
         let new_questions = this.state.questions;
         new_questions[this.state.curr_index].answers[index] = event.target.value;
         this.setState({
@@ -145,7 +168,37 @@ export class NewQuizzPage extends Component {
 
 
     onDoneBtnClicked(event) {
-        console.log('onDoneBtnClicked()');
+        const quiz = this.state;
+        this.props.dispatch({
+            type: ACTION_SAVE_NEW_QUIZ,
+            payload: quiz
+        })
+
+        this.setState({
+            ...this.state,
+            redirect: true
+        })
+    }
+
+
+
+    validateQuiz() {
+        const quiz = this.state;
+
+        if(!this.state.quiz_title || !this.state.quiz_brief || !this.state.quiz_text)
+            return false
+        
+        for (let i=0; i<quiz.questions.length; i++) {
+            let curr_question = quiz.questions[i];
+            if (!curr_question.text)
+                return false;
+            for (let j=0; j<curr_question.answers.length; j++){
+                if (!curr_question.answers[j])
+                    return false;
+            }
+        }
+
+        return true;
     }
 
 
@@ -154,32 +207,30 @@ export class NewQuizzPage extends Component {
         const curr_index = this.state.curr_index;
         const curr_question = this.state.questions[curr_index];
 
-        const answers_block = curr_question.answers.map((e, index) => {
-            return(
-                <FormGroup tag='fieldset'>
-                    <InputGroup className='mt-3'>
-                        <InputGroupAddon addonType="prepend">
-                        <InputGroupText>
-                            <Input addon type="radio" name='radio' aria-label='radio' 
-                                checked={curr_question.correct_index === index} 
-                                onChange={evt => this.onRadioBtnChanged(evt, index)}>
-                            </Input>
-                        </InputGroupText>
-                        </InputGroupAddon>
-
-                        <Input onChange={evt => this.onAnswerTextChanged(evt, index)} value={curr_question.answers[index]}>
+        const answers_block = curr_question.answers.map((e, index) => (
+            <FormGroup tag='fieldset'>
+                <InputGroup className='mt-3'>
+                    <InputGroupAddon addonType="prepend">
+                    <InputGroupText>
+                        <Input addon type="radio" name='radio' aria-label='radio' 
+                            checked={curr_question.correct_index === index} 
+                            onChange={evt => this.onRadioBtnChanged(evt, index)}>
                         </Input>
+                    </InputGroupText>
+                    </InputGroupAddon>
 
-                        <InputGroupAddon addonType='append'>
-                            <Button className='material-icons' color='danger' disabled={index <= 3} 
-                                    onClick={evt => this.onDeleteAnswerBtnClicked(evt, index)}>
-                                delete
-                            </Button>
-                        </InputGroupAddon>
-                    </InputGroup>
-                </FormGroup>
-            );
-        });
+                    <Input onChange={evt => this.onAnswerTextChanged(evt, index)} value={curr_question.answers[index]}>
+                    </Input>
+
+                    <InputGroupAddon addonType='append'>
+                        <Button className='material-icons' color='danger' disabled={index <= 3} 
+                                onClick={evt => this.onDeleteAnswerBtnClicked(evt, index)}>
+                            delete
+                        </Button>
+                    </InputGroupAddon>
+                </InputGroup>
+            </FormGroup>
+        ));
 
         return(
             <Container fluid>
@@ -192,29 +243,28 @@ export class NewQuizzPage extends Component {
                     </Col>
                 </Row>
 
-                <Row className='mt-3'>
-                    <Col md={{size: 8, offset: 2}} xl={{size: 6, offset: 3}}>
-                        <h4>Basic Information</h4>
+                <Row className='mt-3 mb-5'>
+                    <Col md={{size: 8, offset: 2}} xl={{size: 6, offset: 3}} style={{boxShadow: '1px 2px 5px gainsboro', borderRadius: '4px'}}>
+                        <div className='mt-3'>
+                            <h4>Basic Information</h4>
+                        </div>
+
                         <Form>
                             <FormGroup>
-                                <Label for='quizz-title'>Quizz Title:</Label>
-                                <Input id='quizz-title'></Input>
+                                <Label for='quiz-title'>Quizz Title:</Label>
+                                <Input id='quiz-title' onChange={evt => this.onTitleChanged(evt)}></Input>
                             </FormGroup>
                             <FormGroup>
                                 <Label for='brief-desc'>Brief Description:</Label>
-                                <Input id='brief-desc'></Input>
+                                <Input id='brief-desc' onChange={evt => this.onBriefChanged(evt)}></Input>
                             </FormGroup>
                             <FormGroup>
                                 <Label for='intro-para'>Intro Paragraph:</Label>
-                                <Input type='textarea' id='intro-para'></Input>
+                                <Input type='textarea' id='intro-para' onChange={evt => this.onParagraphChanged(evt)}></Input>
                             </FormGroup>
                         </Form>
-                    </Col>
-                </Row>
 
-                <Row className='mt-3'>
-                    <Col md={{size: 8, offset: 2}} xl={{size: 6, offset: 3}}>
-                        <div> 
+                        <div className='mt-3'> 
                             <h4 className='d-inline'>Editing Question {this.state.curr_index+1} of {this.state.questions.length}</h4>
 
                             <Button color='primary' className='material-icons ml-3' onClick={e => this.onAddQuestionBtnClicked(e)}>
@@ -257,12 +307,18 @@ export class NewQuizzPage extends Component {
                 </Row>
 
                 <FloatingButton>
-                    <Button block color='link' className='text-white material-icons' 
-                            style={{textDecoration: 'none', height: '100%'}}>
+                    <Button block color='link' className='text-white material-icons' disabled={!this.validateQuiz()} 
+                            style={{textDecoration: 'none', height: '100%'}} onClick={evt => this.onDoneBtnClicked(evt)}>
                         done
                     </Button>
                 </FloatingButton>
+
+                {this.state.redirect && (<Redirect to='/' ></Redirect>)}
             </Container>
         );
     }
 }
+
+
+
+export default connect()(NewQuizzPage);
