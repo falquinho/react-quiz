@@ -8,13 +8,13 @@ import {
     Button
 } from 'reactstrap';
 import { ACTION_DELETE_QUIZ } from '../redux/Actions'
-import './QuizThumb.css'
+import './style.css'
 
 
 
 const quizThumb = props => {
     console.log('quizThumb props: ', props);
-    
+
     const style_obj = {
         animationDelay: String(0.1*props.index)+'s',
     }
@@ -37,9 +37,9 @@ const quizThumb = props => {
             <CardBody>
                 <CardTitle>{props.quiz.quiz_title}</CardTitle>
                 <CardText>{props.quiz.quiz_brief}</CardText>
-                <Link to='/quiz/:index' style={link_style}>START</Link>
+                <Link to={'/quiz'+props.index} style={link_style}>START</Link>
                 <Button color='danger' size='sm' style={{float: 'right'}} 
-                        onClick={evt => props.dispatch(delete_action)}>
+                        onClick={evt => {}}>
                     delete
                 </Button>
             </CardBody>

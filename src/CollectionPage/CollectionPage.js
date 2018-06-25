@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { 
@@ -7,10 +7,10 @@ import {
     Nav,
     Container,
     Row,
-    Col } from 'reactstrap';
-import QuizzThumb from '../components/QuizzThumb';
-import { FloatingButton } from '../components/FloatingButton';
-import { FirstQuizinfo } from '../components/FirstQuizInfo';
+    Col,
+    UncontrolledAlert } from 'reactstrap';
+import QuizThumb from '../QuizThumb/QuizThumb';
+import { FloatingButton } from '../FloatingButton/FloatingButton';
 
 
 
@@ -25,7 +25,7 @@ const collectionPage = props => {
     const thumb_list = props.quizzes.map((value, index) => {
         return (
             <Col md='6' xl='4' style={{marginBottom: 30}}>
-                <QuizzThumb quiz={value} key={index} index={index} dispatch={props.dispatch}/>
+                <QuizThumb quiz={value} key={index} index={index}/>
             </Col>)
     });
 
@@ -49,7 +49,14 @@ const collectionPage = props => {
             <Row style={{marginTop: 30, paddingBottom: 64}}>
                 <Col md={{size: 10, offset: 1}} xl={{size: 6, offset: 3}}>
                     <Row>
-                        { thumb_list.length? thumb_list: (<FirstQuizinfo/>) }
+                        { thumb_list.length? thumb_list: (
+                            <div style={{width: '100%'}}>
+                                <UncontrolledAlert color='info'>
+                                    <h4 className='alert-heading'>Welcome to React Quiz!</h4>
+                                    <p>Click on the + floating button bellow to create a new Quiz.</p>
+                                </UncontrolledAlert>
+                            </div>
+                        ) }
                     </Row>
                 </Col>
             </Row>
