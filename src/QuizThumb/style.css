@@ -12,9 +12,3 @@
     animation-duration: 0.3s;
     animation-fill-mode: backwards;
 }
-
-
-@keyframes fade-in {
-    0%   {opacity: 0;}
-    100% {opacity: 1;}
-}

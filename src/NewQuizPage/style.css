@@ -1,0 +1,5 @@
+#card-col {
+    animation-name: fade-in;
+    animation-duration: 0.3s;
+    animation-fill-mode: backwards;
+}

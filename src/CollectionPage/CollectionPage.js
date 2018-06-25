@@ -11,6 +11,7 @@ import {
     UncontrolledAlert } from 'reactstrap';
 import QuizThumb from '../QuizThumb/QuizThumb';
 import { FloatingButton } from '../FloatingButton/FloatingButton';
+import './style.css';
 
 
 
@@ -26,7 +27,8 @@ class CollectionPage extends Component {
         super(props)
 
         this.state = {
-            quizzes: props.quizzes
+            quizzes: props.quizzes,
+            dispatch: props.dispatch
         }
     }
 
@@ -36,16 +38,9 @@ class CollectionPage extends Component {
         const thumb_list = this.state.quizzes.map((value, index) => {
             return (
                 <Col md='6' xl='4' style={{marginBottom: 30}}>
-                    <QuizThumb quiz={value} key={index} index={index} dispatch={props.dispatch}/>
+                    <QuizThumb quiz={value} key={index} index={index} dispatch={this.state.dispatch}/>
                 </Col>)
         });
-    
-        const link_style = {
-            textAlign: 'center', 
-            lineHeight: 2.6, 
-            textDecoration: 'none', 
-            height: '100%', width: '100%'
-        }
     
         return (
             <Container fluid>
@@ -73,7 +68,7 @@ class CollectionPage extends Component {
                 </Row>
     
                 <FloatingButton>
-                    <Link to='/new' className='material-icons text-white' style={link_style}>add</Link>
+                    <Link id='btn-link' to='/new' className='material-icons text-white'>add</Link>
                 </FloatingButton>
             </Container>
         );

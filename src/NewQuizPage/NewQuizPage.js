@@ -245,7 +245,7 @@ class NewQuizzPage extends Component {
                 </Row>
 
                 <Row className='mt-3 mb-5'>
-                    <Col className='card' md={{size: 8, offset: 2}} xl={{size: 6, offset: 3}}>
+                    <Col id='card-col' className='card' md={{size: 8, offset: 2}} xl={{size: 6, offset: 3}}>
                         <div className='mt-3'>
                             <h4>Basic Information</h4>
                         </div>
