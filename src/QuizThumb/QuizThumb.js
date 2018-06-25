@@ -19,14 +19,6 @@ const quizThumb = props => {
         animationDelay: String(0.1*props.index)+'s',
     }
 
-    const link_style = {
-        float: 'right',
-        textDecoration: 'none',
-        marginLeft: 30,
-        fontWeight: 'bold',
-        lineHeight: '32px'
-     }
-
     const delete_action = {
         type: ACTION_DELETE_QUIZ,
         payload: props.index
@@ -37,9 +29,9 @@ const quizThumb = props => {
             <CardBody>
                 <CardTitle>{props.quiz.quiz_title}</CardTitle>
                 <CardText>{props.quiz.quiz_brief}</CardText>
-                <Link to={'/quiz'+props.index} style={link_style}>START</Link>
+                <Link id='custom-link' to={'/quiz'+props.index} >START</Link>
                 <Button color='danger' size='sm' style={{float: 'right'}} 
-                        onClick={evt => {}}>
+                        onClick={evt => {props.dispatch(delete_action)}}>
                     delete
                 </Button>
             </CardBody>

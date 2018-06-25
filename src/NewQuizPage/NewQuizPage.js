@@ -17,6 +17,7 @@ import {
     Button } from 'reactstrap';
 import { ACTION_SAVE_NEW_QUIZ } from '../redux/Actions';
 import { FloatingButton } from '../FloatingButton/FloatingButton'
+import './style.css';
 
 
 
@@ -244,7 +245,7 @@ class NewQuizzPage extends Component {
                 </Row>
 
                 <Row className='mt-3 mb-5'>
-                    <Col md={{size: 8, offset: 2}} xl={{size: 6, offset: 3}} style={{boxShadow: '1px 2px 5px gainsboro', borderRadius: '4px', border: '1px solid gainsboro'}}>
+                    <Col className='card' md={{size: 8, offset: 2}} xl={{size: 6, offset: 3}}>
                         <div className='mt-3'>
                             <h4>Basic Information</h4>
                         </div>
