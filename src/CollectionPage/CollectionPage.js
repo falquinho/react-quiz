@@ -15,30 +15,21 @@ import './style.css';
 
 
 
-const mapReduxStateToProps = state => ({
-    quizzes: state.quizzes
-});
+const mapStateToProps = state => {
+    return { 
+        quizzes: state.quizzes
+    };
+};
 
 
 
 class CollectionPage extends Component {
 
-    constructor(props){
-        super(props)
-
-        this.state = {
-            quizzes: props.quizzes,
-            dispatch: props.dispatch
-        }
-    }
-
-
-
     render() {
-        const thumb_list = this.state.quizzes.map((value, index) => {
+        const thumb_list = this.props.quizzes.map((value, index) => {
             return (
-                <Col md='6' xl='4' style={{marginBottom: 30}}>
-                    <QuizThumb quiz={value} key={index} index={index} dispatch={this.state.dispatch}/>
+                <Col key={index} md='6' style={{marginBottom: 30}}>
+                    <QuizThumb quiz={value} index={index} dispatch={this.props.dispatch}/>
                 </Col>)
         });
     
@@ -53,7 +44,7 @@ class CollectionPage extends Component {
                     </Col>
                 </Row>
                 <Row style={{marginTop: 30, paddingBottom: 64}}>
-                    <Col md={{size: 10, offset: 1}} xl={{size: 6, offset: 3}}>
+                    <Col md={{size: 8, offset: 2}} xl={{size: 6, offset: 3}}>
                         <Row>
                             { thumb_list.length? thumb_list: (
                                 <div style={{width: '100%'}}>
@@ -77,4 +68,4 @@ class CollectionPage extends Component {
 
 
 
-export default connect(mapReduxStateToProps)(CollectionPage);
+export default connect(mapStateToProps)(CollectionPage);

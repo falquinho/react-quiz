@@ -209,7 +209,7 @@ class NewQuizzPage extends Component {
         const curr_question = this.state.questions[curr_index];
 
         const answers_block = curr_question.answers.map((e, index) => (
-            <FormGroup tag='fieldset'>
+            <FormGroup key={index} tag='fieldset'>
                 <InputGroup className='mt-3'>
                     <InputGroupAddon addonType="prepend">
                     <InputGroupText>

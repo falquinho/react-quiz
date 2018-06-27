@@ -13,22 +13,24 @@ const initialState = {
 export function reducerEntrypoint(state = initialState, action) {
     console.log('reducerEntrypoint()');
 
-    return ({
+    return {
         quizzes: reducerQuizzes(state.quizzes, action)
-    });
+    };
 }
 
 
 
 function reducerQuizzes(state = [], action) {
+    let new_quizzes = state.map(value => {
+        return {...value};
+    });
+
     switch (action.type) {
         case ACTION_SAVE_NEW_QUIZ:
-            var new_quizzes = state;
             new_quizzes.push(action.payload);
             return new_quizzes;
 
         case ACTION_DELETE_QUIZ:
-            var new_quizzes = state;
             new_quizzes.splice(action.payload, 1);
             return new_quizzes;
 

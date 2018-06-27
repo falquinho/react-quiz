@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import {
     Card,
@@ -13,7 +13,6 @@ import './style.css'
 
 
 const quizThumb = props => {
-    console.log('quizThumb props: ', props);
 
     const style_obj = {
         animationDelay: String(0.1*props.index)+'s',
