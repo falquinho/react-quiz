@@ -27,9 +27,9 @@ class NewQuizzPage extends Component {
         super(props)
 
         this.state = {
-            quiz_title: '',
-            quiz_brief: '',
-            quiz_text:  '',
+            title: '',
+            brief: '',
+            paragraph: '',
             questions:  [{
                 text: '',
                 answers: ['', '', '', ''],
@@ -45,7 +45,7 @@ class NewQuizzPage extends Component {
     onTitleChanged(event) {
         this.setState({
             ...this.state,
-            quiz_title: event.target.value
+            title: event.target.value
         });
     }
 
@@ -54,7 +54,7 @@ class NewQuizzPage extends Component {
     onBriefChanged(event) {
         this.setState({
             ...this.state,
-            quiz_brief: event.target.value
+            brief: event.target.value
         });
     }
 
@@ -63,7 +63,7 @@ class NewQuizzPage extends Component {
     onParagraphChanged(event) {
         this.setState({
             ...this.state,
-            quiz_text: event.target.value
+            paragraph: event.target.value
         });
     }
 
@@ -186,7 +186,7 @@ class NewQuizzPage extends Component {
     validateQuiz() {
         const quiz = this.state;
 
-        if(!this.state.quiz_title || !this.state.quiz_brief || !this.state.quiz_text)
+        if(!this.state.title || !this.state.brief || !this.state.paragraph)
             return false
         
         for (let i=0; i<quiz.questions.length; i++) {

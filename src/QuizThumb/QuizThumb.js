@@ -26,8 +26,8 @@ const quizThumb = props => {
     return(
         <Card id='thumb' body style={style_obj}>
             <CardBody>
-                <CardTitle>{props.quiz.quiz_title}</CardTitle>
-                <CardText>{props.quiz.quiz_brief}</CardText>
+                <CardTitle>{props.quiz.title}</CardTitle>
+                <CardText>{props.quiz.brief}</CardText>
                 <Link id='custom-link' to={'/quiz'+props.index} >START</Link>
                 <Button color='danger' size='sm' style={{float: 'right'}} 
                         onClick={evt => {props.dispatch(delete_action)}}>
