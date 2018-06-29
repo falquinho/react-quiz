@@ -1,0 +1,18 @@
+.correct-answer {
+    background-color: #33db53!important;
+    color: white!important;
+}
+
+
+.wrong-answer {
+    background-color: #db334a!important;
+    color: white!important;
+}
+
+
+.result-card {
+    background-color: #efc510!important;
+    color: white!important;
+    text-align: center!important;
+    font-size: 2em!important;
+}
