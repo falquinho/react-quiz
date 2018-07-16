@@ -16,6 +16,7 @@ import {
     InputGroupText,
     Button } from 'reactstrap';
 import { ACTION_SAVE_NEW_QUIZ } from '../redux/Actions';
+import { thunkSaveQuiz } from '../redux/Thunks';
 import { FloatingButton } from '../FloatingButton/FloatingButton'
 import './style.css';
 
@@ -170,10 +171,13 @@ class NewQuizzPage extends Component {
 
     onDoneBtnClicked(event) {
         const quiz = this.state;
-        this.props.dispatch({
-            type: ACTION_SAVE_NEW_QUIZ,
-            payload: quiz
-        })
+
+        // this.props.dispatch({
+        //     type: ACTION_SAVE_NEW_QUIZ,
+        //     payload: quiz
+        // })
+
+        this.props.dispatch(thunkSaveQuiz());
 
         this.setState({
             ...this.state,
