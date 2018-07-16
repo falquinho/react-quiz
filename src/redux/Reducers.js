@@ -5,7 +5,6 @@ import {
     ACTION_UPDATE_QUIZ
 } from './Actions'
 
-import { IDBManager } from '../IDBManager';
 
 
 const initialState = {
@@ -14,6 +13,7 @@ const initialState = {
     quiz: undefined,
     quiz_state: 'fetching'
 }
+
 
 
 export function reducerEntrypoint(state = initialState, action) {
@@ -49,29 +49,12 @@ function reducerQuizzes(state = [], action) {
 
 
 function reducerQuizzesState(state = 'fetching', action) {
-    
+
     switch(action.type) {
         
         case ACTION_UPDATE_QUIZZES:
             return action.payload.state;
 
-        default:
-            return state;
-    }
-}
-
-
-
-function reducerIndexedDB(state = IDBManager(), action) {
-    switch(action.type) {
-        case 'db_store_quiz':
-            break;
-        case 'db_remove_quiz':
-            break;
-        case 'db_get':
-            break;
-        case 'db_get_by_index':
-            break;
         default:
             return state;
     }

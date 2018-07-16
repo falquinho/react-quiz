@@ -172,11 +172,6 @@ class NewQuizzPage extends Component {
     onDoneBtnClicked(event) {
         const quiz = this.state;
 
-        // this.props.dispatch({
-        //     type: ACTION_SAVE_NEW_QUIZ,
-        //     payload: quiz
-        // })
-
         this.props.dispatch(thunkSaveQuiz());
 
         this.setState({

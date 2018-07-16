@@ -1,3 +1,6 @@
+// TODO; understand and fix why this.db is undefined
+
+
 export class IDBManager {
     constructor() {
         this.db_request = window.indexedDB.open('quiz_db', 1);
@@ -55,9 +58,11 @@ export class IDBManager {
 
     // Get all quizzes. Return a promise that will resolve to an array of quizzes metadata.
     get() {
-        if (!this.db) return;
-
+        let this_ = this;
         return new Promise(function(resolve, reject) {
+            console.log('typeof this_', typeof this_);
+
+            if (!this.db) reject('IDBManager.db is undefined!');
 
             let quizzes = [];
             let cursor = this.db.transaction(['quiz_db']).objectStore('quiz_db').openCursor();
@@ -82,6 +87,6 @@ export class IDBManager {
                 console.log('openCursor() onerror');
                 reject('ERROR: openCursor() failed!');
             }
-        });
-    }
+        });// return new Promise()
+    }// get()
 }

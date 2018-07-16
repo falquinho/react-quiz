@@ -11,19 +11,25 @@ import {
     UncontrolledAlert } from 'reactstrap';
 import QuizThumb from '../QuizThumb/QuizThumb';
 import { FloatingButton } from '../FloatingButton/FloatingButton';
+import { thunkGetQuizzes } from '../redux/Thunks';
 import './style.css';
 
 
 
 const mapStateToProps = state => {
     return { 
-        quizzes: state.quizzes
+        quizzes: state.quizzes,
+        quizzes_state: state.quizzes_state
     };
 };
 
 
 
 class CollectionPage extends Component {
+    constructor(props) {
+        super(props);
+        props.dispatch(thunkGetQuizzes());
+    }
 
     render() {
         const thumb_list = this.props.quizzes.map((value, index) => {

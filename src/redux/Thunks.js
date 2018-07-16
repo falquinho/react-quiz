@@ -41,7 +41,12 @@ export function thunkGetQuizzes() {
     return function(dispatch) {
         console.log('thunkGetQuizzes()');
         let db_manager = new IDBManager();
-        db_manager.get().then(
+        
+        let promise = db_manager.get();
+        if (typeof promise === 'undefined')
+            console.log('promise is undefined');
+            
+        promise.then(
             function(val) {
                 console.log('thunkGetQuizzes() resolved', val);
             },
