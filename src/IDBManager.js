@@ -1,92 +1,68 @@
-// TODO; understand and fix why this.db is undefined
+const DB_NAME = 'quiz_db';
+const STORE_NAME = 'quiz_db';
 
 
-export class IDBManager {
-    constructor() {
-        this.db_request = window.indexedDB.open('quiz_db', 1);
-        this.db = undefined;
+function createStore(event) {
+    console.log('createStore()');
+    let db = event.target.result;
+    db.createObjectStore(STORE_NAME, {autoIncrement: true});
+}
 
-        this.db_request.onsuccess = function(event) {
-            console.log('IDBManager.constructor.open.onsuccess');
-            this.db = event.target.result;
+
+
+export function quizDBPut(quiz) {
+    return new Promise(function(resolve, reject){
+        let db_req = window.indexedDB.open(DB_NAME, 1);
+        db_req.onupgradeneeded = createStore;
+        db_req.onerror = function(event) {
+            reject('addQuiz error opening database!');
         }
-
-        this.db_request.onerror = function(event) {
-            console.log('IDBManager.constructor.open.onerror');
-            console.log(this.db_request.error);
-        }
-
-        this.db_request.onupgradeneeded = function(event) {
-            console.log('IDBManager.constructor.open.onupgradeneeded');
+        db_req.onsuccess = function(event) {
             let db = event.target.result;
-            db.createObjectStore('quiz_db', {autoIncrement: true});
+            let transaction = db.transaction([STORE_NAME], 'readwrite');
+            let store = transaction.objectStore(STORE_NAME);
+            let req = store.add(quiz);
+            req.onsuccess = function() {
+                resolve('addQuiz success!');
+            }
+            req.onerror = function() {
+                reject('addQuiz error adding to store!');
+            }
         }
-    }
+    });
+}
 
 
-    // Return the 'request'. Caller must implement 'onsucess' and 'onerror' callbacks
-    addQuiz(quiz) {
-        if (!this.db) return;
 
-        let transaction = this.db.transaction(['quiz_db', 'readwrite']);
-        let store = transaction.objectStore('quiz_db');
-        return store.add(quiz);
-    }
-
-
-    // Return the 'request'. Caller must implement 'onsucess' and 'onerror' callbacks
-    deleteQuiz(index) {
-        if (!this.db) return;
-
-        let transaction = this.db.transaction(['quiz_db'], 'readwrite');
-        let store = transaction.objectStore('quiz_db');
-        return store.delete(index);
-    }
-
-
-    // Get by index.
-    // Return the 'request'. Caller must implement 'onsucess' and 'onerror' callbacks
-    get(index) {
-        if (!this.db) return;
-
-        // omit the 'readwrite' flag for a read-only transaction
-        let transaction = this.db.transaction(['quiz_db']);
-        let store = transaction.objectStore('quiz_db');
-        return store.get(index);
-    }
-
-
-    // Get all quizzes. Return a promise that will resolve to an array of quizzes metadata.
-    get() {
-        let this_ = this;
-        return new Promise(function(resolve, reject) {
-            console.log('typeof this_', typeof this_);
-
-            if (!this.db) reject('IDBManager.db is undefined!');
-
+export function quizDBGet() {
+    return new Promise(function(resolve, reject){
+        let db_req = window.indexedDB.open(DB_NAME, 1);
+        db_req.onupgradeneeded = createStore;
+        db_req.onerror = function(event) {
+            reject('get error opening database');
+        }
+        db_req.onsuccess = function(event) {
             let quizzes = [];
-            let cursor = this.db.transaction(['quiz_db']).objectStore('quiz_db').openCursor();
-
-            cursor.onSuccess = function(event) {
+            let db = event.target.result;
+            let obj_store = db.transaction([STORE_NAME]).objectStore(STORE_NAME);
+            let cursor_req = obj_store.openCursor();
+            cursor_req.onerror = function(event) {
+                reject('quizDBGet error opening cursor!');
+            }
+            cursor_req.onsuccess = function(event) {
                 let cursor = event.target.result;
-                if(cursor) {
+                if(cursor){
                     console.log(cursor.value);
                     quizzes.push({
-                        id: cursor.value.index, 
-                        title: cursor.value.title, 
+                        title: cursor.value.title,
                         brief: cursor.value.brief
                     });
-    
-                } else {
-                    console.log('get() cursor finished: ', quizzes);
-                    resolve(quizzes);
-                }   
-            }
+                    cursor.continue();
 
-            cursor.onerror = function(event) {
-                console.log('openCursor() onerror');
-                reject('ERROR: openCursor() failed!');
+                } else {
+                    resolve(quizzes);
+                }
             }
-        });// return new Promise()
-    }// get()
+        }
+    });
 }

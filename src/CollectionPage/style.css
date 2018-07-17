@@ -5,3 +5,32 @@
     height: 100%;
     width: 100%;
 }
+
+
+.loading-card {
+    background: linear-gradient(to bottom right, gainsboro, slategray);
+    background-size: 400%;
+    min-height: 156px;
+    -moz-animation: loading-bkg 5s ease infinite;
+    -webkit-animation: loading-bkg 5s ease infinite;
+    animation: loading-bkg 5s ease infinite;
+}
+
+
+@-moz-keyframes loading-bkg {
+    0%   {background-position: 0% 0%}
+	50%  {background-position: 100% 100%}
+	100% {background-position: 0% 0%}
+}
+
+@-webkit-keyframes loading-bkg {
+    0%   {background-position: 0% 0%}
+	50%  {background-position: 100% 100%}
+	100% {background-position: 0% 0%}
+}
+
+@keyframes loading-bkg {
+    0%   {background-position: 0% 0%}
+	50%  {background-position: 100% 100%}
+	100% {background-position: 0% 0%}
+}

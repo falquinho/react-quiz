@@ -1,20 +1,22 @@
-import { IDBManager } from "../IDBManager";
+import { 
+    quizDBGet,
+    quizDBPut
+} from "../IDBManager";
+
+import {
+    ACTION_UPDATE_QUIZZES
+} from './Actions'
 
 
 
 export function thunkSaveQuiz(quiz) {
     return function(dispatch) {
         console.log('thunkSaveQuiz()');
-        let db_manager = new IDBManager();
-        let request = db_manager.addQuiz(quiz);
-
-        request.onsuccess = function(event) {
-            console.log('thunkSaveQuiz() onsuccess');
-        }
-        
-        request.onerror = function(event) {
-            console.log('thunkSaveQuiz() onerror');
-        }
+        quizDBPut(quiz).then(function(result) {
+            console.log('thunkSaveQuiz success!', result);
+        }, function(error) {
+            console.log('thunkSaveQuiz error: ', error);
+        });
     }
 }
 
@@ -23,15 +25,6 @@ export function thunkSaveQuiz(quiz) {
 export function thunkDeleteQuiz(index) {
     return function(dispatch) {
         console.log('thunkDeleteQuiz()');
-        let db_manager = new IDBManager();
-        let request = db_manager.deleteQuiz(index);
-        request.onsuccess = function(event) {
-            console.log('thunkDeleteQuiz() onsuccess');
-        }
-
-        request.onerror = function(event) {
-            console.log('thunkDeleteQuiz() onerror');
-        }
     }
 }
 
@@ -40,20 +33,17 @@ export function thunkDeleteQuiz(index) {
 export function thunkGetQuizzes() {
     return function(dispatch) {
         console.log('thunkGetQuizzes()');
-        let db_manager = new IDBManager();
+
+        dispatch({type: ACTION_UPDATE_QUIZZES, payload: {state: 'fetching', data: []}});
         
-        let promise = db_manager.get();
-        if (typeof promise === 'undefined')
-            console.log('promise is undefined');
+        quizDBGet().then(function(result){
+            console.log('thunkGetQuizzes success!', result);
+            dispatch({type: ACTION_UPDATE_QUIZZES, payload: {state: 'done', data: result}});
             
-        promise.then(
-            function(val) {
-                console.log('thunkGetQuizzes() resolved', val);
-            },
-            function(val) {
-                console.log('thunkGetQuizzes() rejected', val);
-            }
-        );
+        }, function(error){
+            console.log('thunkGetQuizzes error: ', error)
+            dispatch({type: ACTION_UPDATE_QUIZZES, payload: {state: 'error', data: []}});
+        });
     }
 }
 
@@ -62,16 +52,5 @@ export function thunkGetQuizzes() {
 export function thunkGetQuiz(index) {
     return function(dispatch) {
         console.log('thunkGetQuiz()');
-
-        let db_manager = new IDBManager();
-        let request = db_manager.get(index);
-
-        request.onsuccess = function(event) {
-            console.log('thunkGetQuiz() onsuccess: ', event.target);
-        }
-
-        request.onerror = function(event) {
-            console.log('thunkGetQuiz() onerror');
-        }
     }
 }

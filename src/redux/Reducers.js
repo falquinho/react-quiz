@@ -28,18 +28,9 @@ export function reducerEntrypoint(state = initialState, action) {
 
 
 function reducerQuizzes(state = [], action) {
-    let new_quizzes = state.map(value => {
-        return {...value};
-    });
-
     switch (action.type) {
-        case ACTION_SAVE_NEW_QUIZ:
-            new_quizzes.push(action.payload);
-            return new_quizzes;
-
-        case ACTION_DELETE_QUIZ:
-            new_quizzes.splice(action.payload, 1);
-            return new_quizzes;
+        case ACTION_UPDATE_QUIZZES:
+            return action.payload.data;
 
         default:
             return state;
@@ -49,9 +40,7 @@ function reducerQuizzes(state = [], action) {
 
 
 function reducerQuizzesState(state = 'fetching', action) {
-
     switch(action.type) {
-        
         case ACTION_UPDATE_QUIZZES:
             return action.payload.state;
 

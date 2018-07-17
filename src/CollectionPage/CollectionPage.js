@@ -8,7 +8,8 @@ import {
     Container,
     Row,
     Col,
-    UncontrolledAlert } from 'reactstrap';
+    UncontrolledAlert,
+    Card } from 'reactstrap';
 import QuizThumb from '../QuizThumb/QuizThumb';
 import { FloatingButton } from '../FloatingButton/FloatingButton';
 import { thunkGetQuizzes } from '../redux/Thunks';
@@ -30,7 +31,7 @@ class CollectionPage extends Component {
         super(props);
         props.dispatch(thunkGetQuizzes());
     }
-
+    
     render() {
         const thumb_list = this.props.quizzes.map((value, index) => {
             return (
@@ -51,16 +52,38 @@ class CollectionPage extends Component {
                 </Row>
                 <Row style={{marginTop: 30, paddingBottom: 64}}>
                     <Col md={{size: 8, offset: 2}} xl={{size: 6, offset: 3}}>
-                        <Row>
-                            { thumb_list.length? thumb_list: (
-                                <div style={{width: '100%'}}>
-                                    <UncontrolledAlert color='info'>
-                                        <h4 className='alert-heading'>Welcome to React Quiz!</h4>
-                                        <p>Click on the + floating button bellow to create a new Quiz.</p>
-                                    </UncontrolledAlert>
-                                </div>
-                            ) }
-                        </Row>
+                        {this.props.quizzes_state === 'fetching' && 
+                            <Row>
+                                <Col md='6' style={{marginBottom: 30}}>
+                                    <Card className='loading-card'/>
+                                </Col>
+                                <Col md='6' style={{marginBottom: 30}}>
+                                    <Card className='loading-card'/>
+                                </Col>
+                            </Row>
+                        }
+
+                        {this.props.quizzes_state === 'error' && 
+                            <div style={{width: '100%'}}>
+                                <UncontrolledAlert color='danger'>
+                                    <h4 className='alert-heading'>Something went wrong :(</h4>
+                                    <p>We had a problem retrieving your quizzes. Please try again.</p>
+                                </UncontrolledAlert>
+                            </div>
+                        }
+                        
+                        {this.props.quizzes_state === 'done' && thumb_list.length &&
+                            thumb_list
+                        }
+                        
+                        {this.props.quizzes_state === 'done' && !thumb_list.length &&
+                            <div style={{width: '100%'}}>
+                                <UncontrolledAlert color='info'>
+                                    <h4 className='alert-heading'>Welcome to React Quiz!</h4>
+                                    <p>Click on the + floating button bellow to create a new Quiz.</p>
+                                </UncontrolledAlert>
+                            </div>
+                        }
                     </Col>
                 </Row>
     
