@@ -60,6 +60,12 @@ class CollectionPage extends Component {
                                 <Col md='6' style={{marginBottom: 30}}>
                                     <Card className='loading-card'/>
                                 </Col>
+                                <Col md='6' style={{marginBottom: 30}}>
+                                    <Card className='loading-card'/>
+                                </Col>
+                                <Col md='6' style={{marginBottom: 30}}>
+                                    <Card className='loading-card'/>
+                                </Col>
                             </Row>
                         }
 
@@ -72,8 +78,10 @@ class CollectionPage extends Component {
                             </div>
                         }
                         
-                        {this.props.quizzes_state === 'done' && thumb_list.length &&
-                            thumb_list
+                        {this.props.quizzes_state === 'done' && thumb_list.length > 0 &&
+                            <Row>
+                                thumb_list
+                            </Row>
                         }
                         
                         {this.props.quizzes_state === 'done' && !thumb_list.length &&

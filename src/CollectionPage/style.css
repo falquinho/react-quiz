@@ -8,12 +8,12 @@
 
 
 .loading-card {
-    background: linear-gradient(to bottom right, gainsboro, slategray);
+    background: linear-gradient(to bottom right, white, gainsboro);
     background-size: 400%;
     min-height: 156px;
-    -moz-animation: loading-bkg 5s ease infinite;
-    -webkit-animation: loading-bkg 5s ease infinite;
-    animation: loading-bkg 5s ease infinite;
+    -moz-animation: loading-bkg 2s ease infinite;
+    -webkit-animation: loading-bkg 2s ease infinite;
+    animation: loading-bkg 2s ease infinite;
 }
 
 

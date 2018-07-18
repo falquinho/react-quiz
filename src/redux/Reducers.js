@@ -6,7 +6,10 @@ import {
 } from './Actions'
 
 
-
+// Possible data states:
+//    fetching
+//    done
+//    error
 const initialState = {
     quizzes: [],
     quizzes_state: 'fetching',
