@@ -36,8 +36,9 @@ class CollectionPage extends Component {
         const thumb_list = this.props.quizzes.map((value, index) => {
             return (
                 <Col key={index} md='6' style={{marginBottom: 30}}>
-                    <QuizThumb quiz={value} index={index} dispatch={this.props.dispatch}/>
-                </Col>)
+                    <QuizThumb quiz_meta={value} dispatch={this.props.dispatch}/>
+                </Col>
+            )
         });
     
         return (
@@ -60,12 +61,6 @@ class CollectionPage extends Component {
                                 <Col md='6' style={{marginBottom: 30}}>
                                     <Card className='loading-card'/>
                                 </Col>
-                                <Col md='6' style={{marginBottom: 30}}>
-                                    <Card className='loading-card'/>
-                                </Col>
-                                <Col md='6' style={{marginBottom: 30}}>
-                                    <Card className='loading-card'/>
-                                </Col>
                             </Row>
                         }
 
@@ -80,7 +75,7 @@ class CollectionPage extends Component {
                         
                         {this.props.quizzes_state === 'done' && thumb_list.length > 0 &&
                             <Row>
-                                thumb_list
+                                {thumb_list}
                             </Row>
                         }
                         

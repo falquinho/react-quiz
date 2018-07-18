@@ -1,5 +1,6 @@
 import { 
     quizDBGet,
+    quizDBDel,
     quizDBPut
 } from "../IDBManager";
 
@@ -22,9 +23,10 @@ export function thunkSaveQuiz(quiz) {
 
 
 
-export function thunkDeleteQuiz(index) {
+export function thunkDeleteQuiz(key) {
     return function(dispatch) {
         console.log('thunkDeleteQuiz()');
+        quizDBDel(key);
     }
 }
 

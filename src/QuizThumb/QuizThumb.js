@@ -7,30 +7,27 @@ import {
     CardText,
     Button
 } from 'reactstrap';
-import { ACTION_DELETE_QUIZ } from '../redux/Actions'
+import { thunkDeleteQuiz, thunkGetQuizzes } from '../redux/Thunks'
 import './style.css'
 
 
 
 const quizThumb = props => {
 
-    const style_obj = {
-        animationDelay: String(0.1*props.index)+'s',
-    }
-
-    const delete_action = {
-        type: ACTION_DELETE_QUIZ,
-        payload: props.index
+    const delete_callback = event => {
+        props.dispatch(thunkDeleteQuiz(props.quiz_meta.db_key));
+        props.dispatch(thunkGetQuizzes());
     }
 
     return(
-        <Card id='thumb' body style={style_obj}>
+        <Card id='thumb' body style={{animationDelay: '0.2s'}}>
             <CardBody>
-                <CardTitle>{props.quiz.title}</CardTitle>
-                <CardText>{props.quiz.brief}</CardText>
-                <Link id='custom-link' to={'/quiz'+props.index} >START</Link>
-                <Button color='danger' size='sm' style={{float: 'right'}} 
-                        onClick={evt => {props.dispatch(delete_action)}}>
+                <CardTitle>{props.quiz_meta.title}</CardTitle>
+                <CardText>{props.quiz_meta.brief}</CardText>
+                <Link id='custom-link' to={'/quiz'+props.quiz_meta.db_key}>
+                    START
+                </Link>
+                <Button color='danger' size='sm' style={{float: 'right'}} onClick={delete_callback}>
                     delete
                 </Button>
             </CardBody>

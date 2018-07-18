@@ -34,6 +34,28 @@ export function quizDBPut(quiz) {
 
 
 
+export function quizDBDel(key) {
+    return new Promise(function(resolve, reject){
+        let db_req = window.indexedDB.open(DB_NAME, 1);
+        db_req.onupgradeneeded = createStore;
+        db_req.onerror = function(event) {
+            reject('quizDBDel error opening database!');
+        }
+        db_req.onsuccess = function(event) {
+            let transaction = event.target.result.transaction([STORE_NAME], 'readwrite');
+            let req = transaction.objectStore(STORE_NAME).delete(key);
+            req.onerror = function(event) {
+                reject('quizDBDel error on objectStore.delete');
+            }
+            req.onsuccess = function(event) {
+                resolve('quizDBDel objectSotore.delete success!');
+            }
+        }
+    })
+}
+
+
+
 export function quizDBGet() {
     return new Promise(function(resolve, reject){
         let db_req = window.indexedDB.open(DB_NAME, 1);
@@ -52,8 +74,12 @@ export function quizDBGet() {
             cursor_req.onsuccess = function(event) {
                 let cursor = event.target.result;
                 if(cursor){
-                    console.log(cursor.value);
+                    console.log('cursor.value: ', cursor.value);
+                    console.log('cursor.primaryKey: ', cursor.primaryKey);
+                    console.log('cursor.key: ', cursor.key);
+                    
                     quizzes.push({
+                        db_key: cursor.key,
                         title: cursor.value.title,
                         brief: cursor.value.brief
                     });

@@ -172,7 +172,7 @@ class NewQuizzPage extends Component {
     onDoneBtnClicked(event) {
         const quiz = this.state;
 
-        this.props.dispatch(thunkSaveQuiz());
+        this.props.dispatch(thunkSaveQuiz(quiz));
 
         this.setState({
             ...this.state,
