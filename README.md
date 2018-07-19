@@ -1,3 +1,16 @@
 # React Quizz
+A simple web app to create and solve quizzes.
 
-This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
+
+## Technologies used
+- react js
+- redux
+- thunk
+- indexedDB
+
+
+## Instructions
+- Clone this repository
+- npm install
+- npm start
+
