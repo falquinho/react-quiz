@@ -23,8 +23,10 @@ export function reducerEntrypoint(state = initialState, action) {
     console.log('reducerEntrypoint()');
 
     return {
-        quizzes: reducerQuizzes(state.quizzes, action),
-        quizzes_state: reducerQuizzesState(state.quizzes_state, action)
+        quizzes:       reducerQuizzes(state.quizzes, action),
+        quizzes_state: reducerQuizzesState(state.quizzes_state, action),
+        quiz:          reducerQuiz(state.quiz, action),
+        quiz_state:    reducerQuizState(state.quiz_state, action)
     };
 }
 
@@ -47,6 +49,29 @@ function reducerQuizzesState(state = 'fetching', action) {
         case ACTION_UPDATE_QUIZZES:
             return action.payload.state;
 
+        default:
+            return state;
+    }
+}
+
+
+
+function reducerQuiz(state = undefined, action) {
+    switch(action.type) {
+        case ACTION_UPDATE_QUIZ:
+            return action.payload.data;
+
+        default:
+            return state;
+    }
+}
+
+
+function reducerQuizState(state = 'fetching', action) {
+    switch(action.type) {
+        case ACTION_UPDATE_QUIZ:
+            return action.payload.state;
+        
         default:
             return state;
     }

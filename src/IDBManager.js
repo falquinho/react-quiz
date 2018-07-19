@@ -56,6 +56,28 @@ export function quizDBDel(key) {
 
 
 
+export function quizDBGetQuiz(key) {
+    return new Promise(function(resolve, reject){
+        let db_req = window.indexedDB.open(DB_NAME, 1);
+        db_req.onupgradeneeded = createStore;
+        db_req.onerror = function(event) {
+            reject('quizDBGet(key) error opening database!');
+        }
+        db_req.onsuccess = function(event) {
+            let req = event.target.result.transaction([STORE_NAME]).objectStore(STORE_NAME).get(key);
+            req.onerror = function(event){
+                reject('quizDBGet(key) error gettin quiz with key ', key);
+            }
+            req.onsuccess = function(event) {
+                console.log('quizDBGetQuiz onsuccess event.target:', event.target);
+                resolve(event.target.result);
+            }
+        }
+    });
+}
+
+
+
 export function quizDBGet() {
     return new Promise(function(resolve, reject){
         let db_req = window.indexedDB.open(DB_NAME, 1);

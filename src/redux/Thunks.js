@@ -1,11 +1,13 @@
 import { 
     quizDBGet,
+    quizDBGetQuiz,
     quizDBDel,
     quizDBPut
 } from "../IDBManager";
 
 import {
-    ACTION_UPDATE_QUIZZES
+    ACTION_UPDATE_QUIZZES,
+    ACTION_UPDATE_QUIZ
 } from './Actions'
 
 
@@ -51,8 +53,18 @@ export function thunkGetQuizzes() {
 
 
 
-export function thunkGetQuiz(index) {
+export function thunkGetQuiz(key) {
     return function(dispatch) {
-        console.log('thunkGetQuiz()');
+        console.log('thunkGetQuiz(key)');
+
+        dispatch({type: ACTION_UPDATE_QUIZ, payload: {state: 'fetching', data: undefined}});
+
+        quizDBGetQuiz(key).then(function(result){
+            console.log('thunkGetQuiz quizDBGetQuiz success!', result);
+            dispatch({type: ACTION_UPDATE_QUIZ, payload: {state: 'done', data: result}});
+
+        }, function(error){
+            dispatch({type: ACTION_UPDATE_QUIZ, payload: {state: 'error', data: undefined}});
+        })
     }
 }

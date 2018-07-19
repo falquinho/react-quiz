@@ -18,11 +18,13 @@ import {
     InputGroupAddon,
     InputGroupText,
     FormGroup } from 'reactstrap';
+import { thunkGetQuiz } from '../redux/Thunks';
 import './style.css'
 
 
 const mapReduxStateToProps = state => ({
-    quizzes: state.quizzes
+    quiz: state.quiz,
+    quiz_state: state.quiz_state
 });    
 
 
@@ -30,12 +32,16 @@ class QuizPage extends Component {
     constructor(props) {
         super(props);
 
+        console.log('QuizPage props: ', props);
+
         this.state = {
-            quiz: props.quizzes[props.match.params.index],
+            quiz_key: +props.match.params.db_key,
             curr_question:  -1,
             checked_answer: 0,
             answers_map: {}
         }
+
+        props.dispatch(thunkGetQuiz(this.state.quiz_key));
     }
 
 
@@ -70,11 +76,11 @@ class QuizPage extends Component {
 
 
     getInputClassName(index) {
-        if (!this.state.quiz)
+        if (!this.props.quiz)
             return '';
 
         const curr_question = this.state.curr_question;
-        const question = this.state.quiz.questions[curr_question];
+        const question = this.props.quiz.questions[curr_question];
         const answer_map = this.state.answers_map;
 
         if (answer_map[curr_question] !== index)
@@ -90,7 +96,7 @@ class QuizPage extends Component {
     calcNoCorrectAnswers() {
         let no_correct = 0;
         let answers_map = this.state.answers_map;
-        let questions   = this.state.quiz.questions;
+        let questions   = this.props.quiz.questions;
         for (var i=0; i<questions.length; i++) {
             if (questions[i].correct_index === answers_map[i])
                 no_correct++;
@@ -101,15 +107,9 @@ class QuizPage extends Component {
 
 
     render(){
-        const quiz = this.state.quiz;
-        const curr_question  = this.state.curr_question;
-        const checked_answer = this.state.checked_answer;
-        const answer_map     = this.state.answers_map;
-
-        let error_conditional = typeof this.state.quiz === 'undefined';
-        let intro_conditional = !error_conditional && curr_question < 0;
-        let quest_conditional = !error_conditional && curr_question >= 0 && curr_question < quiz.questions.length;
-        let reslt_conditional = !error_conditional && curr_question >= quiz.questions.length;
+        console.log('QuizPage.render()::props: ', this.props);
+        const quiz = this.props.quiz;
+        const curr_question = this.state.curr_question;
 
         return(
             <Container fluid>
@@ -117,23 +117,28 @@ class QuizPage extends Component {
                     <Col>
                         <Navbar color='dark' dark expand='md' style={{marginLeft: -15, marginRight: -15}}>
                             <Link to='/' className='material-icons text-light mr-3' style={{textDecoration:'none'}}>arrow_back</Link>
-                            <NavbarBrand style={{color: 'gainsboro'}}>{this.state.quiz? this.state.quiz.title : 'Not Found'}</NavbarBrand>
+                            <NavbarBrand style={{color: 'gainsboro'}}>{this.props.quiz? this.props.quiz.title : 'Not Found'}</NavbarBrand>
                         </Navbar>
                     </Col>
                 </Row>
                 <Row className='mt-3'>
                     <Col md={{size: 10, offset: 1}} xl={{size: 6, offset: 3}}>
-                        { error_conditional &&
+                        { this.props.quiz_state === 'error' &&
                             <Alert color='danger'>
                                 <h4 className='alert-heading'>Something went wrong :(</h4>
-                                <p>The Quiz was not found. Please go back and try again.</p>
+                                <p>We could not retrieve the quiz. Please go back and try again.</p>
                             </Alert>
                         }
 
-                        { intro_conditional &&
-                             <Card>
+                        { this.props.quiz_state === 'fetching' && 
+                            <Card className='loading-card'>
+                            </Card>
+                        }
+
+                        { this.props.quiz_state === 'done' && curr_question < 0 &&
+                            <Card>
                                 <CardBody>
-                                    <CardText>{this.state.quiz.paragraph}</CardText>
+                                    <CardText>{this.props.quiz.paragraph}</CardText>
                                     <Button color='primary' style={{float: 'right'}} onClick={evt => this.onBeginOrNextBtnClicked(evt)}>
                                         Begin
                                     </Button>
@@ -141,7 +146,7 @@ class QuizPage extends Component {
                             </Card>
                         }  
 
-                        { quest_conditional &&
+                        { this.props.quiz_state === 'done' && curr_question >= 0 && curr_question < quiz.questions.length &&
                             <Card>
                                 <CardBody>
                                     <CardTitle>Question {curr_question+1} of {quiz.questions.length}</CardTitle>
@@ -177,7 +182,7 @@ class QuizPage extends Component {
                             </Card>
                         }
 
-                        { reslt_conditional &&
+                        { this.props.quiz && curr_question >= quiz.questions.length &&
                             <Card className='result-card'>
                                 <CardBody>
                                     <CardTitle>Final Score</CardTitle>
